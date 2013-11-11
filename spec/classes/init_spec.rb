@@ -2,7 +2,63 @@ require 'spec_helper'
 
 describe 'rpcbind' do
   describe 'package resource' do
-    context 'with default params' do
+    context 'with default params on unsupported osfamily' do
+      let(:facts) { { :osfamily => 'Solaris' } }
+
+      it 'should fail' do
+        expect {
+          should include_class('rpcbind')
+        }.to raise_error(Puppet::Error,/rpcbind supports osfamilies Debian and RedHat. Detected osfamily is <Solaris>/)
+      end
+    end
+
+    context 'with default params on supported osfamily Debian with unsupported lsbdistid' do
+      let(:facts) do
+        { :lsbdistid => 'Canaima',
+          :osfamily => 'Debian',
+        }
+      end
+
+      it 'should fail' do
+        expect {
+          should include_class('rpcbind')
+        }.to raise_error(Puppet::Error,/rpcbind on osfamily Debian supports lsbdistid Debian and Ubuntu. Detected lsbdistid is <Canaima>./)
+      end
+    end
+
+    context 'with default params on osfamily RedHat' do
+      let(:facts) { { :osfamily => 'RedHat' } }
+
+      it {
+        should contain_package('rpcbind_package').with({
+          'ensure' => 'installed',
+          'name'   => 'rpcbind',
+        })
+      }
+    end
+
+    context 'with default params on Debian' do
+      let(:facts) do
+        { :lsbdistid => 'Debian',
+          :osfamily => 'Debian',
+        }
+      end
+
+      it {
+        should contain_package('rpcbind_package').with({
+          'ensure' => 'installed',
+          'name'   => 'rpcbind',
+        })
+      }
+    end
+
+    context 'with default params on Ubuntu' do
+      let(:facts) do
+        { :lsbdistid => 'Ubuntu',
+          :osfamily => 'Debian',
+        }
+      end
+
       it {
         should contain_package('rpcbind_package').with({
           'ensure' => 'installed',
@@ -12,9 +68,8 @@ describe 'rpcbind' do
     end
 
     context 'with ensure absent' do
-      let(:params) { {
-        :package_ensure => 'absent',
-      } }
+      let(:facts) { { :osfamily => 'RedHat' } }
+      let(:params) { { :package_ensure => 'absent' } }
 
       it {
         should contain_package('rpcbind_package').with({
@@ -25,9 +80,8 @@ describe 'rpcbind' do
     end
 
     context 'with supplied string for package name' do
-      let(:params) { {
-        :package_name => 'my_rpcbind',
-      } }
+      let(:facts) { { :osfamily => 'RedHat' } }
+      let(:params) { { :package_name => 'my_rpcbind' } }
 
       it {
         should contain_package('rpcbind_package').with({
@@ -38,9 +92,8 @@ describe 'rpcbind' do
     end
 
     context 'with supplied array for package name' do
-      let(:params) { {
-        :package_name => [ 'rpcbind', 'rpcbindfoo', 'rpcbindbar' ],
-      } }
+      let(:facts) { { :osfamily => 'RedHat' } }
+      let(:params) { { :package_name => [ 'rpcbind', 'rpcbindfoo', 'rpcbindbar' ] } }
 
       it {
         should contain_package('rpcbind_package').with({
@@ -52,7 +105,9 @@ describe 'rpcbind' do
   end
 
   describe 'service resource' do
-    context 'with default params' do
+    context 'with default params on osfamily RedHat' do
+      let(:facts) { { :osfamily => 'RedHat' } }
+
       it {
         should contain_service('rpcbind_service').with({
           'ensure' => 'running',
@@ -62,10 +117,41 @@ describe 'rpcbind' do
       }
     end
 
+    context 'with default params on osfamily RedHat' do
+      let(:facts) do
+        { :lsbdistid => 'Debian',
+          :osfamily => 'Debian',
+        }
+      end
+
+      it {
+        should contain_service('rpcbind_service').with({
+          'ensure' => 'running',
+          'name'   => 'rpcbind',
+          'enable' => true,
+        })
+      }
+    end
+
+    context 'with default params on Ubuntu' do
+      let(:facts) do
+        { :lsbdistid => 'Ubuntu',
+          :osfamily => 'Debian',
+        }
+      end
+
+      it {
+        should contain_service('rpcbind_service').with({
+          'ensure' => 'running',
+          'name'   => 'rpcbind-boot',
+          'enable' => true,
+        })
+      }
+    end
+
     context 'with ensure stopped' do
-      let(:params) { {
-        :service_ensure => 'stopped',
-      } }
+      let(:facts) { { :osfamily => 'RedHat' } }
+      let(:params) { { :service_ensure => 'stopped' } }
 
       it {
         should contain_service('rpcbind_service').with({
@@ -77,9 +163,8 @@ describe 'rpcbind' do
     end
 
     context 'with supplied string for service name' do
-      let(:params) { {
-        :service_name => 'my_rpcbind',
-      } }
+      let(:facts) { { :osfamily => 'RedHat' } }
+      let(:params) { { :service_name => 'my_rpcbind' } }
 
       it {
         should contain_service('rpcbind_service').with({
@@ -91,9 +176,8 @@ describe 'rpcbind' do
     end
 
     context 'with enable false' do
-      let(:params) { {
-        :service_enable => false,
-      } }
+      let(:facts) { { :osfamily => 'RedHat' } }
+      let(:params) { { :service_enable => false } }
 
       it {
         should contain_service('rpcbind_service').with({
