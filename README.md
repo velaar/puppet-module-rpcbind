@@ -8,7 +8,12 @@ Puppet module to manage rpcbind
 ---
 
 # Compatibility
+
+This module is built for use with Puppet v3 on the following platforms.
+
+ * Debian 6
  * EL 6
+ * Ubuntu 12.04 LTS
 
 ---
 
@@ -42,4 +47,4 @@ service_name
 ------------
 String of service name.
 
-- *Default*: 'rpcbind'
+- *Default*: based on osfamily
