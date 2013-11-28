@@ -8,7 +8,7 @@ describe 'rpcbind' do
       it 'should fail' do
         expect {
           should include_class('rpcbind')
-        }.to raise_error(Puppet::Error,/rpcbind supports osfamilies Debian, Suse and RedHat. Detected osfamily is <Solaris>/)
+        }.to raise_error(Puppet::Error,/rpcbind supports osfamilies Debian, RedHat, and Suse. Detected osfamily is <Solaris>/)
       end
     end
 
@@ -128,26 +128,10 @@ describe 'rpcbind' do
       }
     end
 
-    context 'with default params on osfamily RedHat' do
+    context 'with default params on Debian' do
       let(:facts) do
         { :lsbdistid => 'Debian',
           :osfamily => 'Debian',
-        }
-      end
-
-      it {
-        should contain_service('rpcbind_service').with({
-          'ensure' => 'running',
-          'name'   => 'rpcbind',
-          'enable' => true,
-        })
-      }
-    end
-
-    context 'with default params on Suse' do
-      let(:facts) do
-        { :lsbdistid => 'SUSE LINUX',
-          :osfamily => 'Suse',
         }
       end
 
@@ -171,6 +155,18 @@ describe 'rpcbind' do
         should contain_service('rpcbind_service').with({
           'ensure' => 'running',
           'name'   => 'rpcbind-boot',
+          'enable' => true,
+        })
+      }
+    end
+
+    context 'with default params on Suse' do
+      let(:facts) { { :osfamily => 'Suse' } }
+
+      it {
+        should contain_service('rpcbind_service').with({
+          'ensure' => 'running',
+          'name'   => 'rpcbind',
           'enable' => true,
         })
       }
