@@ -1,20 +1,20 @@
 require 'spec_helper'
 describe 'rpcbind' do
 
-  describe 'package resource' do
-    context 'with default params on unsupported osfamily' do
+  describe 'with default values for parameters' do
+    context 'on unsupported osfamily' do
       let(:facts) { { :osfamily => 'Solaris' } }
 
       it 'should fail' do
         expect {
           should contain_class('rpcbind')
-        }.to raise_error(Puppet::Error,/rpcbind supports osfamilies Debian, RedHat, and Suse. Detected osfamily is <Solaris>/)
+        }.to raise_error(Puppet::Error,/^rpcbind supports osfamilies Debian, RedHat, and Suse. Detected osfamily is <Solaris>/)
       end
     end
 
-    context 'with default params on supported osfamily Debian with unsupported lsbdistid' do
+    context 'on supported osfamily Debian with unsupported lsbdistid' do
       let(:facts) do
-        { :lsbdistid => 'Canaima',
+        { :lsbdistid => 'Unsupported',
           :osfamily => 'Debian',
         }
       end
@@ -22,12 +22,39 @@ describe 'rpcbind' do
       it 'should fail' do
         expect {
           should contain_class('rpcbind')
-        }.to raise_error(Puppet::Error,/rpcbind on osfamily Debian supports lsbdistid Debian and Ubuntu. Detected lsbdistid is <Canaima>./)
+        }.to raise_error(Puppet::Error,/^rpcbind on osfamily Debian supports lsbdistid Debian and Ubuntu. Detected lsbdistid is <Unsupported>./)
       end
     end
 
-    context 'with default params on osfamily Suse' do
-      let(:facts) { { :osfamily => 'Suse' } }
+    context 'on supported osfamily Suse with unsupported lsbmajdistrelease' do
+      let(:facts) do
+        { :lsbmajdistrelease => '9',
+          :osfamily          => 'Suse',
+        }
+      end
+
+      it 'should fail' do
+        expect {
+          should contain_class('rpcbind')
+        }.to raise_error(Puppet::Error,/^rpcbind on osfamily Suse supports lsbmajdistrelease 10 and 11. Detected lsbmajdistrelease is <9>./)
+      end
+    end
+  end
+
+  describe 'package resource' do
+    context 'with default params on osfamily Suse 10' do
+      let(:facts) { { :osfamily => 'Suse', :lsbmajdistrelease => '10' } }
+
+      it {
+        should contain_package('rpcbind_package').with({
+          'ensure' => 'installed',
+          'name'   => 'portmap',
+        })
+      }
+    end
+
+    context 'with default params on osfamily Suse 11' do
+      let(:facts) { { :osfamily => 'Suse', :lsbmajdistrelease => '11' } }
 
       it {
         should contain_package('rpcbind_package').with({
@@ -36,6 +63,7 @@ describe 'rpcbind' do
         })
       }
     end
+
 
     context 'with default params on osfamily RedHat' do
       let(:facts) { { :osfamily => 'RedHat' } }
@@ -160,8 +188,28 @@ describe 'rpcbind' do
       }
     end
 
-    context 'with default params on Suse' do
-      let(:facts) { { :osfamily => 'Suse' } }
+    context 'with default params on Suse 10' do
+      let(:facts) do
+        { :osfamily          => 'Suse',
+          :lsbmajdistrelease => '10',
+        }
+      end
+
+      it {
+        should contain_service('rpcbind_service').with({
+          'ensure' => 'running',
+          'name'   => 'portmap',
+          'enable' => true,
+        })
+      }
+    end
+
+    context 'with default params on Suse 11' do
+      let(:facts) do
+        { :osfamily          => 'Suse',
+          :lsbmajdistrelease => '11',
+        }
+      end
 
       it {
         should contain_service('rpcbind_service').with({
