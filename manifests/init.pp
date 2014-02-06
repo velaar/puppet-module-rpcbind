@@ -62,15 +62,14 @@ class rpcbind (
     $service_name_real = $service_name
   }
 
-  package { 'rpcbind_package':
+  package { $package_name_real:
     ensure => $package_ensure,
-    name   => $package_name_real,
   }
 
   service { 'rpcbind_service':
     ensure  => $service_ensure,
     name    => $service_name_real,
     enable  => $service_enable,
-    require => Package['rpcbind_package'],
+    require => Package[$package_name_real],
   }
 }
