@@ -46,9 +46,8 @@ describe 'rpcbind' do
       let(:facts) { { :osfamily => 'Suse', :lsbmajdistrelease => '10' } }
 
       it {
-        should contain_package('rpcbind_package').with({
+        should contain_package('portmap').with({
           'ensure' => 'installed',
-          'name'   => 'portmap',
         })
       }
     end
@@ -57,9 +56,8 @@ describe 'rpcbind' do
       let(:facts) { { :osfamily => 'Suse', :lsbmajdistrelease => '11' } }
 
       it {
-        should contain_package('rpcbind_package').with({
+        should contain_package('rpcbind').with({
           'ensure' => 'installed',
-          'name'   => 'rpcbind',
         })
       }
     end
@@ -69,9 +67,8 @@ describe 'rpcbind' do
       let(:facts) { { :osfamily => 'RedHat' } }
 
       it {
-        should contain_package('rpcbind_package').with({
+        should contain_package('rpcbind').with({
           'ensure' => 'installed',
-          'name'   => 'rpcbind',
         })
       }
     end
@@ -84,9 +81,8 @@ describe 'rpcbind' do
       end
 
       it {
-        should contain_package('rpcbind_package').with({
+        should contain_package('rpcbind').with({
           'ensure' => 'installed',
-          'name'   => 'rpcbind',
         })
       }
     end
@@ -99,9 +95,8 @@ describe 'rpcbind' do
       end
 
       it {
-        should contain_package('rpcbind_package').with({
+        should contain_package('rpcbind').with({
           'ensure' => 'installed',
-          'name'   => 'rpcbind',
         })
       }
     end
@@ -111,9 +106,8 @@ describe 'rpcbind' do
       let(:params) { { :package_ensure => 'absent' } }
 
       it {
-        should contain_package('rpcbind_package').with({
+        should contain_package('rpcbind').with({
           'ensure' => 'absent',
-          'name'   => 'rpcbind',
         })
       }
     end
@@ -123,23 +117,24 @@ describe 'rpcbind' do
       let(:params) { { :package_name => 'my_rpcbind' } }
 
       it {
-        should contain_package('rpcbind_package').with({
+        should contain_package('my_rpcbind').with({
           'ensure' => 'installed',
-          'name'   => 'my_rpcbind',
         })
       }
     end
 
     context 'with supplied array for package name' do
       let(:facts) { { :osfamily => 'RedHat' } }
-      let(:params) { { :package_name => [ 'rpcbind', 'rpcbindfoo', 'rpcbindbar' ] } }
+      packages = [ 'rpcbind', 'rpcbindfoo', 'rpcbindbar' ]
+      let(:params) { { :package_name => packages } }
 
-      it {
-        should contain_package('rpcbind_package').with({
-          'ensure' => 'installed',
-          'name'   => [ 'rpcbind', 'rpcbindfoo', 'rpcbindbar' ],
-        })
-      }
+      packages.each do |pkg|
+        it {
+          should contain_package(pkg).with({
+            'ensure' => 'installed',
+          })
+        }
+      end
     end
   end
 
