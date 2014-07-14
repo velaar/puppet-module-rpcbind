@@ -224,6 +224,22 @@ describe 'rpcbind' do
       }
     end
 
+    context 'with default params on Suse 12' do
+      let(:facts) do
+        { :osfamily          => 'Suse',
+          :lsbmajdistrelease => '12',
+        }
+      end
+
+      it {
+        should contain_service('rpcbind_service').with({
+          'ensure' => 'running',
+          'name'   => 'rpcbind',
+          'enable' => true,
+        })
+      }
+    end
+
     context 'with ensure stopped' do
       let(:facts) { { :osfamily => 'RedHat' } }
       let(:params) { { :service_ensure => 'stopped' } }
