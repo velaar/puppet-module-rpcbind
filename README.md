@@ -15,6 +15,7 @@ This module is built for use with Puppet v3 on the following platforms.
  * EL 6
  * Suse 10
  * Suse 11
+ * Suse 12
  * Ubuntu 12.04 LTS
 
 ---
