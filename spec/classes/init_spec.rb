@@ -26,6 +26,21 @@ describe 'rpcbind' do
       end
     end
 
+    context 'on supported osfamily Debian with supported lsbdistid Ubuntu and unsupported lsbdistrelease' do
+      let(:facts) do
+        { :lsbdistid      => 'Ubuntu',
+          :osfamily       => 'Debian',
+          :lsbdistrelease => 'not12.04',
+        }
+      end
+
+      it 'should fail' do
+        expect {
+          should contain_class('rpcbind')
+        }.to raise_error(Puppet::Error,/^rpcbind is only supported on Ubuntu 12.04. Detected lsbdistrelease is <not12.04>./)
+      end
+    end
+
     context 'on supported osfamily Suse with unsupported lsbmajdistrelease' do
       let(:facts) do
         { :lsbmajdistrelease => '9',
@@ -96,10 +111,11 @@ describe 'rpcbind' do
       }
     end
 
-    context 'with default params on Ubuntu' do
+    context 'with default params on Ubuntu 12.04' do
       let(:facts) do
-        { :lsbdistid => 'Ubuntu',
-          :osfamily => 'Debian',
+        { :lsbdistid      => 'Ubuntu',
+          :lsbdistrelease => '12.04',
+          :osfamily       => 'Debian',
         }
       end
 
@@ -176,17 +192,18 @@ describe 'rpcbind' do
       }
     end
 
-    context 'with default params on Ubuntu' do
+    context 'with default params on Ubuntu 12.04' do
       let(:facts) do
-        { :lsbdistid => 'Ubuntu',
-          :osfamily => 'Debian',
+        { :lsbdistid      => 'Ubuntu',
+          :osfamily       => 'Debian',
+          :lsbdistrelease => '12.04',
         }
       end
 
       it {
         should contain_service('rpcbind_service').with({
           'ensure' => 'running',
-          'name'   => 'rpcbind-boot',
+          'name'   => 'portmap',
           'enable' => true,
         })
       }
