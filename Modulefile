@@ -1,5 +1,5 @@
 name    'ghoneycutt-rpcbind'
-version '1.3.1'
+version '1.4.0'
 source 'git://github.com/ghoneycutt/puppet-module-rpcbind.git'
 author 'ghoneycutt'
 license 'Apache-2.0'
