@@ -8,9 +8,6 @@
   "project_page": "https://github.com/ghoneycutt/puppet-module-rpcbind",
   "issues_url": "https://github.com/ghoneycutt/puppet-module-rpcbind/issues",
   "description": "Manages rpcbind",
-  "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 3.2.0"}
-  ],
   "requirements": [
     {
       "name": "pe",
@@ -65,8 +62,12 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "12.04"
+        "12.04",
+        "14.04"
       ]
     }
+  ],
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">= 3.2.0"}
   ]
 }
