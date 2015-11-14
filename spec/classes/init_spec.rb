@@ -8,7 +8,7 @@ describe 'rpcbind' do
       it 'should fail' do
         expect {
           should contain_class('rpcbind')
-        }.to raise_error(Puppet::Error,/^rpcbind supports osfamilies Debian, RedHat, and Suse. Detected osfamily is <Solaris>/)
+        }.to raise_error(Puppet::Error,/rpcbind supports osfamilies Debian, RedHat, and Suse. Detected osfamily is <Solaris>/)
       end
     end
 
@@ -22,7 +22,7 @@ describe 'rpcbind' do
       it 'should fail' do
         expect {
           should contain_class('rpcbind')
-        }.to raise_error(Puppet::Error,/^rpcbind on osfamily Debian supports lsbdistid Debian and Ubuntu. Detected lsbdistid is <Unsupported>./)
+        }.to raise_error(Puppet::Error,/rpcbind on osfamily Debian supports lsbdistid Debian and Ubuntu. Detected lsbdistid is <Unsupported>\./)
       end
     end
 
@@ -37,7 +37,7 @@ describe 'rpcbind' do
       it 'should fail' do
         expect {
           should contain_class('rpcbind')
-        }.to raise_error(Puppet::Error,/^rpcbind is only supported on Ubuntu 12.04 and 14.04. Detected lsbdistrelease is <not12.04>./)
+        }.to raise_error(Puppet::Error,/rpcbind is only supported on Ubuntu 12.04 and 14.04. Detected lsbdistrelease is <not12.04>\./)
       end
     end
 
@@ -51,7 +51,7 @@ describe 'rpcbind' do
       it 'should fail' do
         expect {
           should contain_class('rpcbind')
-        }.to raise_error(Puppet::Error,/^rpcbind on osfamily Suse supports lsbmajdistrelease 10, 11, and 12. Detected lsbmajdistrelease is <9>./)
+        }.to raise_error(Puppet::Error,/rpcbind on osfamily Suse supports lsbmajdistrelease 10, 11, and 12. Detected lsbmajdistrelease is <9>\./)
       end
     end
   end
