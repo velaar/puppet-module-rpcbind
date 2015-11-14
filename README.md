@@ -11,7 +11,9 @@ To use this module, simply `include ::rpcbind`
 
 # Compatibility
 
-This module is built for use with Puppet v3 Ruby versions 1.8.7, 1.9.3, 2.0.0 and 2.1.0 on the following platforms.
+This module is built for use with Puppet v3 (with and without the future
+parser) and Puppet v4 with Ruby versions 1.8.7, 1.9.3, 2.0.0 and 2.1.0 on the
+following platforms.
 
  * Debian 6
  * EL 6
