@@ -5,6 +5,8 @@
 
 Puppet module to manage rpcbind
 
+To use this module, simply `include ::rpcbind`
+
 ---
 
 # Compatibility
