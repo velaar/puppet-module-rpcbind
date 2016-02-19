@@ -8,6 +8,7 @@ class rpcbind (
   $service_enable = true,
   $service_ensure = 'running',
   $service_name   = 'USE_DEFAULTS',
+  $manage_rpcbind = true,
 ) {
 
   case $::osfamily {
@@ -76,14 +77,16 @@ class rpcbind (
     $service_name_real = $service_name
   }
 
-  package { $package_name_real:
-    ensure => $package_ensure,
-  }
+  if $manage_rpcbind == true {
+    package { $package_name_real:
+      ensure => $package_ensure,
+    }
 
-  service { 'rpcbind_service':
-    ensure  => $service_ensure,
-    name    => $service_name_real,
-    enable  => $service_enable,
-    require => Package[$package_name_real],
+    service { 'rpcbind_service':
+      ensure  => $service_ensure,
+      name    => $service_name_real,
+      enable  => $service_enable,
+      require => Package[$package_name_real],
+    }
   }
 }
